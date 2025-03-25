@@ -29,7 +29,7 @@ const commands = [
   ];
 const fs = require("fs");
 const client = new Discord.Client(options);
-const prefix = "";//prefix自分で入れてね
+const prefix = "t!";//prefix自分で入れてね
 const fetch = require("node-fetch");
 const cash = new Object();
 const trmsgid = new Object();
@@ -56,7 +56,7 @@ client.on("messageCreate", async (message) => {
   if (command === 'tr') { //コマンドで手動翻訳
      var target = encodeURIComponent(args[0])
      var text = encodeURIComponent(message.content.replace(args[0],"").replace(prefix+"tr",""))
-     var content = await fetch(`https://script.google.com/macros/s/AKfycbyZzeACcCpM2PNgoYN1jg64CTzZcXCx-xYHp9WC6yNQYdrCmyYcER-_vR8A-D2Epvok_w/exec?text=${text}&source=&target=${target}`).then(res => res.text())
+     var content = await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${text}&source=&target=${target}`).then(res => res.text())
      message.channel.send({
       embeds: [
         {
@@ -118,15 +118,15 @@ client.on("messageCreate", async (message) => {
                   name: "stop",
                   value: `メッセージ自動翻訳機能を停止します。`,
                   inline:true
-                },
-                {
-                  name: "tr [言語] [本文]",
-                  value: `メッセージを翻訳します。\n対応言語は[こちら](https://developers.google.com/admin-sdk/directory/v1/)`,
-                  inline:false
                 }
+                // {
+                //   name: "tr [言語] [本文]",
+                //   value: `メッセージを翻訳します。\n対応言語は[こちら](https://developers.google.com/admin-sdk/directory/v1/)`,
+                //   inline:false
+                // }
               ],
           footer: {
-            text: "made by maka_7264 ©2023-2024 maka_7264", //適宜変えてください。
+            text: "made by tomichi", //適宜変えてください。
           },
           timestamp: new Date(),
         },
@@ -149,8 +149,8 @@ client.on("messageCreate", async (message) => {
             var trtext = message.content
           }
           try{
-              var jares = await fetch(`https://script.google.com/macros/s/AKfycbyZzeACcCpM2PNgoYN1jg64CTzZcXCx-xYHp9WC6yNQYdrCmyYcER-_vR8A-D2Epvok_w/exec?text=${trtext}&source=&target=${encodeURIComponent("ja")}`).then(res => res.text())
-              var enres = await fetch(`https://script.google.com/macros/s/AKfycbyZzeACcCpM2PNgoYN1jg64CTzZcXCx-xYHp9WC6yNQYdrCmyYcER-_vR8A-D2Epvok_w/exec?text=${trtext}&source=&target=${encodeURIComponent("en")}`).then(res => res.text())
+              var jares = await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${trtext}`).then(res => res.text())
+              var enres = await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${trtext}`).then(res => res.text())
     if(jares==="[リンク省略]"){
       return
     } //もしリンクのみの場合、Google Apps Scriptでリンクを[リンク省略]に置き換えてるので、リンク省略のみが返された場合はメッセージ送信しない(複数リンク非対応)
@@ -221,7 +221,7 @@ client.on("interactionCreate", async (interaction) => {
     cash.timestamp3 = Date.now()
     await client.channels.cache.get(interaction.channel.id).messages.cache.get(msg.id).delete()
     cash.timestamp4 = Date.now()
-    await fetch(`https://script.google.com/macros/s/AKfycbyZzeACcCpM2PNgoYN1jg64CTzZcXCx-xYHp9WC6yNQYdrCmyYcER-_vR8A-D2Epvok_w/exec?text=${"test"}&source=&target=${encodeURIComponent("ja")}`).then(res => res.text())
+    await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${"test"}&source=&target=${encodeURIComponent("ja")}`).then(res => res.text())
     cash.timestamp5 = Date.now()
     return await interaction.editReply({
       content: `EndPoint : ${cash.timestamp0-Date.parse(interaction.createdAt)}(Not so accurate.)\nsendmessage : ${cash.timestamp-cash.timestamp0}\nsendwebhook : ${cash.timestamp3-cash.timestamp}\ndeletemessage : ${cash.timestamp4-cash.timestamp3}\ntranslateapi : ${cash.timestamp5-cash.timestamp4}`,
@@ -258,8 +258,8 @@ client.on('messageUpdate',async (oldMessage,newMessage) => { //メッセージ�
     const webhook = await getWebhookInChannel(oldMessage.channel);
     const translatemsg = trmsgid[oldMessage.id]
     try{
-              var jares = await fetch(`https://script.google.com/macros/s/AKfycbyZzeACcCpM2PNgoYN1jg64CTzZcXCx-xYHp9WC6yNQYdrCmyYcER-_vR8A-D2Epvok_w/exec?text=${newMessage.content}&source=&target=${encodeURIComponent("ja")}`).then(res => res.text())
-    var enres = await fetch(`https://script.google.com/macros/s/AKfycbyZzeACcCpM2PNgoYN1jg64CTzZcXCx-xYHp9WC6yNQYdrCmyYcER-_vR8A-D2Epvok_w/exec?text=${newMessage.content}&source=&target=${encodeURIComponent("en")}`).then(res => res.text())
+              var jares = await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${newMessage.content}&source=&target=${encodeURIComponent("ja")}`).then(res => res.text())
+    var enres = await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${newMessage.content}&source=&target=${encodeURIComponent("en")}`).then(res => res.text())
     if(jares==="[リンク省略]"){
       return
     } 
