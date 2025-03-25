@@ -56,7 +56,7 @@ client.on("messageCreate", async (message) => {
   if (command === 'tr') { //コマンドで手動翻訳
      var target = encodeURIComponent(args[0])
      var text = encodeURIComponent(message.content.replace(args[0],"").replace(prefix+"tr",""))
-     var content = await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${text}&source=&target=${target}`).then(res => res.text())
+     var content = await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${text}`).then(res => res.text())
      message.channel.send({
       embeds: [
         {
@@ -221,7 +221,7 @@ client.on("interactionCreate", async (interaction) => {
     cash.timestamp3 = Date.now()
     await client.channels.cache.get(interaction.channel.id).messages.cache.get(msg.id).delete()
     cash.timestamp4 = Date.now()
-    await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${"test"}&source=&target=${encodeURIComponent("ja")}`).then(res => res.text())
+    await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${"test"}`).then(res => res.text())
     cash.timestamp5 = Date.now()
     return await interaction.editReply({
       content: `EndPoint : ${cash.timestamp0-Date.parse(interaction.createdAt)}(Not so accurate.)\nsendmessage : ${cash.timestamp-cash.timestamp0}\nsendwebhook : ${cash.timestamp3-cash.timestamp}\ndeletemessage : ${cash.timestamp4-cash.timestamp3}\ntranslateapi : ${cash.timestamp5-cash.timestamp4}`,
@@ -258,26 +258,26 @@ client.on('messageUpdate',async (oldMessage,newMessage) => { //メッセージ�
     const webhook = await getWebhookInChannel(oldMessage.channel);
     const translatemsg = trmsgid[oldMessage.id]
     try{
-              var jares = await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${newMessage.content}&source=&target=${encodeURIComponent("ja")}`).then(res => res.text())
-    var enres = await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${newMessage.content}&source=&target=${encodeURIComponent("en")}`).then(res => res.text())
-    if(jares==="[リンク省略]"){
-      return
-    } 
-    if(newMessage.content===""){
-      return
+      var jares = await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${newMessage.content}`).then(res => res.text())
+      var enres = await fetch(`https://script.google.com/macros/s/AKfycbzyDkv8ZN3NE2dVZalOoNtZoqTebqh4AXb5dHVv_kM3NJo0_laetBQka3qIQ3F1w5hv/exec?text=${newMessage.content}`).then(res => res.text())
+      if(jares==="[リンク省略]"){
+        return
+      } 
+      if(newMessage.content===""){
+        return
+      }
+      if(jares===""){
+        return
+      }
+      if(enres===""){
+        return
+      }
+      if(jares.match('<H1>Bad Request</H1>')){
+        return await webhook.editMessage(translatemsg,`Cannot translate.`)
+      }
+      if(jares.match('<title>Error</title>')){
+        return await webhook.editMessage(translatemsg,`Cannot translate.`)
     }
-    if(jares===""){
-      return
-    }
-    if(enres===""){
-      return
-    }
-    if(jares.match('<H1>Bad Request</H1>')){
-      return await webhook.editMessage(translatemsg,`Cannot translate.`)
-    }
-    if(jares.match('<title>Error</title>')){
-      return await webhook.editMessage(translatemsg,`Cannot translate.`)
-   }
     webhook.editMessage(translatemsg,`ja: ${jares}\nen: ${enres}`)
     }catch(err){console.error(err)}
   }
